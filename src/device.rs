@@ -1898,6 +1898,20 @@ impl DeviceRef {
         }
     }
 
+    pub fn new_buffer_with_no_copy(
+        &self,
+        bytes: *const std::ffi::c_void,
+        length: NSUInteger,
+        options: MTLResourceOptions,
+    ) -> Buffer {
+        unsafe {
+            msg_send![self, newBufferWithBytesNoCopy:bytes
+                                              length:length
+                                             options:options
+                                         deallocator:std::ptr::null::<std::ffi::c_void>()]
+        }
+    }
+
     pub fn new_texture(&self, descriptor: &TextureDescriptorRef) -> Texture {
         unsafe { msg_send![self, newTextureWithDescriptor: descriptor] }
     }
